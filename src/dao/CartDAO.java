@@ -116,5 +116,23 @@ public class CartDAO {
 		
 		return false;
 	}
+	
+	public boolean clearCart (String idCustomer) {
+		String query = "DELETE FROM cartitem WHERE idCustomer = ?";
+		
+		try {
+			PreparedStatement ps = db.prepare(query);
+			ps.setString(1, idCustomer);
+			ps.executeUpdate();
+			
+			return true;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+
 }
 

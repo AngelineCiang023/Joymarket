@@ -38,11 +38,15 @@ public class ProductDAO {
 	}
 	
 	public Product getProductId (String idProduct) {
-		String query = "SELECT * FROM product WHERE idProduct = '" + idProduct + "'";
+		String query = "SELECT * FROM product WHERE idProduct = ?";
 		
-		ResultSet rs = db.execQuery(query);
 		
 		try {
+			PreparedStatement ps = db.prepare(query);
+			ps.setString(1, idProduct);
+			
+			ResultSet rs = ps.executeQuery();
+			
 			if (rs.next()) {
 				return new Product(
 					rs.getString("idProduct"),
@@ -50,7 +54,7 @@ public class ProductDAO {
 					rs.getDouble("price"),
 					rs.getInt("stock"),
 					rs.getString("category")
-					);
+				);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -69,6 +73,22 @@ public class ProductDAO {
 			
 			return ps.executeUpdate() > 0;
 			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	public boolean decreaseStock (String idProduct, int quantity) {
+		String query = "UPDATE product SET stock = stock - ? WHERE idProduct = ? AND stock >= ?";
+		
+		try {
+			PreparedStatement ps = db.prepare(query);
+			ps.setInt(1, quantity);
+			ps.setString(2, idProduct);
+			ps.setInt(3, quantity);
+			return ps.executeUpdate()  > 0;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

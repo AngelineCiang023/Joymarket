@@ -22,7 +22,7 @@ public class UpdateCartItemView {
 	private CartItem cartItem;
 	private CartController cartController;
 	
-	private Label title;
+	private Label titleLabel;
 	private Label productLabel;
 	private Label priceLabel;
 	private Label countLabel;
@@ -42,11 +42,18 @@ public class UpdateCartItemView {
 		this.cartItem = cartItem;
 		this.cartController = new CartController();
 		
-		title = new Label("--- Update Cart Item ---");
+		//
+		
+		titleLabel = new Label("--- Update Cart Item ---");
+		
+		//
+		
 		productLabel = new Label("Product: " + cartItem.getProductName());
 		priceLabel = new Label("Price: " + cartItem.getFormattedPrice());
 		countLabel = new Label("Count :");
 		countField = new TextField(String.valueOf(cartItem.getCount()));
+		
+		//
 		
 		saveButton = new Button("Save");
 		cancelButton = new Button("Cancel");
@@ -73,8 +80,10 @@ public class UpdateCartItemView {
 			primaryStage.setScene(cartView.getScene());
 		});
 		
+		//
+		
 		root = new VBox(10, 
-			title,
+			titleLabel,
 			productLabel,
 			priceLabel,
 			countLabel,
@@ -82,6 +91,7 @@ public class UpdateCartItemView {
 			saveButton,
 			cancelButton
 		);
+		
 		root.setPadding(new Insets(20));
 		
 		scene = new Scene(root, 350, 250);

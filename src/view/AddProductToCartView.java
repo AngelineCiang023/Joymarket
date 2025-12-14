@@ -39,12 +39,16 @@ public class AddProductToCartView {
         this.selectedProduct = selectedProduct;
         this.cartController = new CartController();
         
+        //
+        
         backButton = new Button("Back");
         
         backButton.setOnAction (e -> {
         	ProductListView listView = new ProductListView (primaryStage, loggedUser);
         	primaryStage.setScene(listView.getScene());
         });
+        
+        //
 
         titleLabel = new Label("--- Add Product to Cart ---");
         nameLabel  = new Label("Product: " + selectedProduct.getName());
@@ -54,6 +58,8 @@ public class AddProductToCartView {
         
         TextField countTextField = new TextField();
         countTextField.setPromptText("Enter quantity");
+        
+        //
 
         addButton = new Button("Add");
         addButton.setOnAction(e -> {
@@ -72,6 +78,8 @@ public class AddProductToCartView {
                 showAlert("Error", result);
             }
         });
+        
+        //
 
         root = new VBox(10);
         root.setPadding(new Insets(20));

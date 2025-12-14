@@ -8,10 +8,14 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Product;
@@ -23,9 +27,16 @@ public class ProductListView {
 	private User loggedUser;
 	private Stage primaryStage;
 	
+	private Label titleLabel;
+	
 	private Button cartButton;
+	private Button orderHistoryButton;
 	
 	private TableView<Product> table;
+	
+	private Region spacer;
+	
+	private HBox topBar;
 	
 	private VBox root;
 	
@@ -33,11 +44,25 @@ public class ProductListView {
 		this.primaryStage = primaryStage;
 		this.loggedUser = loggedUser;
 		
+		//
+		
+		titleLabel = new Label("--- Product List ---");
+		
+		//
+		
 		cartButton = new Button("View Cart");
 		cartButton.setOnAction(e -> {
 			CartListView cartView = new CartListView(primaryStage, loggedUser);
 			primaryStage.setScene(cartView.getScene());
 		});
+		
+		orderHistoryButton = new Button("Order History");
+		orderHistoryButton.setOnAction(e -> {
+			OrderHistoryView historyView = new OrderHistoryView(primaryStage, loggedUser);
+			primaryStage.setScene(historyView.getScene());
+		});
+		
+		//
 		
 		table = new TableView<>();
 		
@@ -80,16 +105,27 @@ public class ProductListView {
 			
 		});
 		
+		//
+		
 		table.getColumns().addAll(idCol, nameCol, priceCol, stockCol, actionCol);
 		table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		
-		// Load data dari ProductDAO
+			// Load data dari ProductDAO
 		ProductDAO productDAO = new ProductDAO();
 		List<Product> productList = productDAO.getAllProducts();
 		ObservableList<Product> data = FXCollections.observableArrayList(productList);
 		table.setItems(data);
 		
-		root = new VBox(10, cartButton, table);
+		//
+		
+		spacer = new Region();
+		HBox.setHgrow(spacer, Priority.ALWAYS);
+		
+		topBar = new HBox(10, cartButton, spacer, orderHistoryButton);
+		
+		//
+		
+		root = new VBox(10, titleLabel, topBar, table);
 		root.setPadding(new Insets(20));
 		
 		scene = new Scene(root, 600, 400);
